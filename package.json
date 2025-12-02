@@ -8,6 +8,6 @@
     "build": "echo \"Static build handled by Vercel\""
   },
   "engines": {
-    "node": "18.x"
+    "node": "22.x"
   }
 }
