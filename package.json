@@ -1,0 +1,13 @@
+{
+  "name": "multilevel-speaking-app",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vercel dev",
+    "start": "vercel dev",
+    "build": "echo \"Static build handled by Vercel\""
+  },
+  "engines": {
+    "node": "18.x"
+  }
+}
