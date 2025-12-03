@@ -2,608 +2,1609 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>IELTS Speaking Test – Set 1</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CEFR Speaking – Multilevel</title>
   <style>
     * {
+      margin: 0;
+      padding: 0;
       box-sizing: border-box;
     }
+
+    :root {
+      --bg1: #020617;
+      --bg2: #0f172a;
+      --accent: #38bdf8;
+      --accent-strong: #0ea5e9;
+      --accent-soft: rgba(56, 189, 248, 0.2);
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --card-bg: rgba(15, 23, 42, 0.96);
+      --border: rgba(148, 163, 184, 0.4);
+      --danger: #ef4444;
+      --success: #22c55e;
+    }
+
     body {
-      margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top, #1e293b 0, #020617 55%, #000 100%);
-      color: #f9fafb;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(56, 189, 248, 0.2), transparent 55%),
+        radial-gradient(circle at bottom right, rgba(94, 234, 212, 0.18), transparent 55%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+      color: var(--text-main);
       min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 12px;
+      overflow-x: hidden;
     }
-    .app {
-      width: 100%;
-      max-width: 960px;
+
+    .grain {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.2;
+      mix-blend-mode: soft-light;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 140 140' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n' x='-20%25' y='-20%25' width='140%25' height='140%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.7'/%3E%3C/svg%3E");
+      z-index: -1;
     }
-    .card {
-      background: rgba(2, 6, 23, 0.96);
-      border-radius: 24px;
-      padding: 20px 18px;
-      box-shadow: 0 22px 45px rgba(0, 0, 0, 0.6);
-      border: 1px solid rgba(148, 163, 184, 0.25);
+
+    .app-shell {
+      max-width: 1320px;
+      margin: 24px auto 40px;
+      padding: 0 18px;
     }
-    .header {
+
+    .app-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      margin-bottom: 18px;
       gap: 12px;
-      flex-wrap: wrap;
-      margin-bottom: 14px;
     }
-    .title-block {
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo {
+      width: 46px;
+      height: 46px;
+      border-radius: 18px;
+      background: radial-gradient(circle at 30% 20%, #f9fafb, #e5e7eb 40%, #0f172a 80%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 20px;
+      color: #020617;
+      box-shadow: 0 12px 35px rgba(15, 23, 42, 0.9);
+    }
+
+    .brand-text h1 {
+      font-size: 18px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .brand-text p {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .chip {
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      font-size: 11px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(15, 23, 42, 0.9);
+      backdrop-filter: blur(10px);
+      color: var(--text-muted);
+    }
+
+    .chip-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--success);
+      box-shadow: 0 0 8px rgba(34, 197, 94, 0.8);
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      box-shadow: 0 20px 60px rgba(15, 23, 42, 0.9);
+      padding: 22px 20px 24px;
+      backdrop-filter: blur(14px);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      gap: 10px;
+    }
+
+    .card-title {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .card-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .badge {
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+    }
+
+    .badge-accent {
+      border-color: var(--accent-soft);
+      color: var(--accent-strong);
+      background: radial-gradient(circle at 0 0, var(--accent-soft), transparent 60%);
+    }
+
+    .input-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-top: 8px;
+    }
+
+    .field-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      margin-bottom: 5px;
+    }
+
+    .field-input {
+      width: 100%;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(15, 23, 42, 0.96);
+      padding: 9px 14px;
+      color: var(--text-main);
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease,
+        background 0.15s ease;
+    }
+
+    .field-input:focus {
+      border-color: var(--accent-strong);
+      box-shadow: 0 0 0 1px var(--accent-soft);
+      background: rgba(15, 23, 42, 0.98);
+    }
+
+    .helper-text {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 10px;
+    }
+
+    .btn-row {
+      margin-top: 18px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border-radius: 999px;
+      border: none;
+      padding: 9px 18px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      transition: transform 0.1s ease, box-shadow 0.1s ease,
+        background 0.15s ease, opacity 0.15s ease;
+    }
+
+    .btn-primary {
+      background: radial-gradient(circle at 30% 0%, #e0f2fe, #0ea5e9);
+      color: #020617;
+      box-shadow: 0 12px 35px rgba(56, 189, 248, 0.5);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 16px 40px rgba(56, 189, 248, 0.6);
+    }
+
+    .btn-secondary {
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text-main);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(15, 23, 42, 0.96);
+    }
+
+    .btn[disabled] {
+      opacity: 0.45;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+
+    /* MAIN MENU */
+
+    .menu-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 2.7fr) minmax(0, 1.1fr);
+      gap: 22px;
+      margin-top: 10px;
+    }
+
+    .set-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 16px;
+      margin-top: 14px;
+    }
+
+    .set-card {
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: radial-gradient(circle at top left, var(--accent-soft), transparent 60%),
+        rgba(15, 23, 42, 0.96);
+      padding: 14px 14px 16px;
+      cursor: pointer;
+      transition: transform 0.12s ease, box-shadow 0.12s ease,
+        border-color 0.12s ease, background 0.12s ease, opacity 0.12s ease;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 6px;
     }
-    .title-block h1 {
-      font-size: 1.3rem;
-      margin: 0;
+
+    .set-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 34px rgba(15, 23, 42, 0.9);
+      border-color: var(--accent-soft);
     }
-    .subtitle {
-      font-size: 0.85rem;
-      color: #9ca3af;
+
+    .set-card.disabled {
+      cursor: default;
+      opacity: 0.35;
+      box-shadow: none;
+      transform: none;
+      background: rgba(15, 23, 42, 0.96);
     }
-    .timer {
-      font-weight: 600;
-      font-size: 1.05rem;
-      padding: 6px 14px;
+
+    .set-label-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .set-icon {
+      width: 40px;
+      height: 40px;
       border-radius: 999px;
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid rgba(55, 65, 81, 0.9);
+      background: radial-gradient(circle at 30% 20%, #e0f2fe, #0ea5e9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: #020617;
+      box-shadow: 0 10px 24px rgba(56, 189, 248, 0.55);
+      flex-shrink: 0;
     }
-    .fields-row {
+
+    .set-name {
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      font-size: 13px;
+    }
+
+    .set-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .pill-coming {
+      font-size: 11px;
+      padding: 3px 7px;
+      border-radius: 999px;
+      border: 1px dashed var(--border);
+      color: var(--text-muted);
+      margin-left: auto;
+    }
+
+    .info-block {
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      padding: 14px 13px;
+      background: radial-gradient(circle at bottom right, rgba(94, 234, 212, 0.18), transparent 60%),
+        rgba(15, 23, 42, 0.96);
+      font-size: 13px;
+    }
+
+    .info-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .info-list {
+      margin-top: 6px;
+      padding-left: 18px;
+      color: var(--text-muted);
+    }
+
+    .info-list li {
+      margin-bottom: 4px;
+    }
+
+    .stat-row {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      margin-bottom: 10px;
+      margin-top: 6px;
     }
-    .fields-row input {
-      flex: 1 1 140px;
-      padding: 9px 12px;
+
+    .stat-pill {
       border-radius: 999px;
-      border: 1px solid #374151;
-      background: #020617;
-      color: #f9fafb;
-      outline: none;
-      font-size: 0.92rem;
+      padding: 4px 9px;
+      border: 1px solid var(--border);
+      font-size: 11px;
+      color: var(--text-muted);
     }
-    .fields-row input::placeholder {
-      color: #6b7280;
-    }
-    .fields-row input:focus {
-      border-color: #38bdf8;
-      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.4);
-    }
-    .btn {
-      border-radius: 999px;
-      padding: 10px 22px;
-      border: none;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 0.95rem;
-      transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.12s ease;
-      white-space: nowrap;
-    }
-    .btn-primary {
-      background: linear-gradient(135deg, #22c55e, #a3e635);
-      color: #022c22;
-      box-shadow: 0 10px 22px rgba(34, 197, 94, 0.5);
-    }
-    .btn-primary:hover:not(:disabled) {
-      transform: translateY(-1px);
-      box-shadow: 0 14px 26px rgba(34, 197, 94, 0.65);
-    }
-    .btn-primary:active:not(:disabled) {
-      transform: translateY(0);
-      box-shadow: 0 8px 18px rgba(34, 197, 94, 0.45);
-    }
-    .btn-primary:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-      box-shadow: none;
-    }
-    .content {
+
+    /* SET OVERVIEW */
+
+    .set-overview-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.9fr) minmax(0, 1.3fr);
+      gap: 18px;
       margin-top: 10px;
-      padding: 14px 10px;
-      border-radius: 18px;
-      background: radial-gradient(circle at top left, rgba(15, 118, 110, 0.25), transparent 55%),
-                  radial-gradient(circle at bottom right, rgba(59, 130, 246, 0.25), transparent 60%),
-                  rgba(15, 23, 42, 0.96);
-      border: 1px solid rgba(31, 41, 55, 0.9);
-      min-height: 230px;
+    }
+
+    .section-block {
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: rgba(15, 23, 42, 0.96);
+      padding: 13px 12px 14px;
+      font-size: 14px;
+    }
+
+    .section-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .section-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .question-list {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .question-list li {
+      position: relative;
+      padding-left: 16px;
+      margin-bottom: 6px;
+    }
+
+    .question-list li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: var(--accent-strong);
+    }
+
+    .picture-wrapper {
+      margin-top: 6px;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.9);
+    }
+
+    .picture-wrapper img {
+      width: 100%;
+      display: block;
+    }
+
+    .columns-two {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .for-block,
+    .against-block {
+      border-radius: 14px;
+      border: 1px dashed var(--border);
+      padding: 9px 10px;
+      font-size: 13px;
+    }
+
+    .for-title {
+      color: var(--success);
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .against-title {
+      color: var(--danger);
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .mini-list {
+      padding-left: 16px;
+      color: var(--text-muted);
+      text-align: left;
+    }
+
+    .mini-list li {
+      margin-bottom: 3px;
+    }
+
+    .overview-footer {
+      margin-top: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* FULLSCREEN TEST */
+
+    .test-card {
+      margin-top: 10px;
+      border-radius: 22px;
+      border: 1px solid var(--border);
+      background: radial-gradient(circle at top left, var(--accent-soft), transparent 60%),
+        rgba(15, 23, 42, 0.96);
+      min-height: calc(100vh - 120px);
+      padding: 18px 18px 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .test-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .test-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .test-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .progress-bar {
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(30, 64, 175, 0.7);
+      overflow: hidden;
+      margin-top: 6px;
+    }
+
+    .progress-inner {
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #0ea5e9, #22c55e);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .test-main {
+      flex: 1;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      gap: 10px;
-    }
-    .section-label {
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: #9ca3af;
-    }
-    .section-title {
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: #a5b4fc;
-    }
-    .questions {
-      font-size: 0.96rem;
-      line-height: 1.55;
-      white-space: pre-line;
-      color: #e5e7eb;
-    }
-    .transition-text {
-      font-size: 1.25rem;
-      font-weight: 700;
+      align-items: center;
       text-align: center;
+      padding: 10px 6vw;
+      gap: 16px;
     }
-    .status {
-      margin-top: 10px;
-      font-size: 0.86rem;
-      color: #9ca3af;
+
+    .test-part-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
     }
-    audio {
-      margin-top: 6px;
+
+    .test-question {
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    .test-extra {
+      font-size: 15px;
+      color: var(--text-muted);
+      max-width: 780px;
+    }
+
+    .test-image {
+      margin-top: 8px;
+      max-width: 520px;
       width: 100%;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.95);
     }
-    @media (max-width: 640px) {
+
+    .test-image img {
+      width: 100%;
+      display: block;
+    }
+
+    .timer-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-top: 8px;
+      font-size: 13px;
+    }
+
+    .timer-label {
+      color: var(--text-muted);
+    }
+
+    .timer-value {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--danger);
+    }
+
+    .record-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: rgba(239, 68, 68, 0.14);
+      color: #fecaca;
+      font-size: 12px;
+    }
+
+    .record-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: #f97373;
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.9);
+      animation: pulse 1.2s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+      }
+      70% {
+        transform: scale(1.15);
+        box-shadow: 0 0 0 7px rgba(239, 68, 68, 0);
+      }
+      100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+      }
+    }
+
+    .wave {
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+      height: 26px;
+      margin-top: 10px;
+    }
+
+    .wave-bar {
+      width: 3px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #22c55e, #16a34a);
+      transition: height 0.05s ease-out;
+    }
+
+    .test-footer {
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--text-muted);
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .completion-screen {
+      margin-top: 32px;
+      border-radius: 22px;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      padding: 30px 24px 24px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(15, 23, 42, 0.95);
+    }
+
+    .completion-screen h2 {
+      font-size: 24px;
+      color: var(--success);
+      margin-bottom: 8px;
+    }
+
+    .completion-screen p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    @media (max-width: 900px) {
+      .menu-layout,
+      .set-overview-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .test-main {
+        padding-inline: 16px;
+      }
+
+      .test-question {
+        font-size: 21px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .app-shell {
+        margin-top: 16px;
+      }
+
       .card {
-        border-radius: 16px;
-        padding: 14px 12px;
+        padding-inline: 14px;
       }
-      .content {
-        padding: 12px 9px;
-        min-height: 200px;
-      }
-      .header {
+
+      .app-header {
+        flex-direction: column;
         align-items: flex-start;
       }
     }
   </style>
 </head>
 <body>
-  <div class="app">
-    <div class="card">
-      <div class="header">
-        <div class="title-block">
-          <h1>IELTS Speaking – Set 1</h1>
-          <div class="subtitle">The whole test is recorded and sent to your teacher automatically.</div>
-        </div>
-        <div class="timer">Time: <span id="timerDisplay">00:00</span></div>
-      </div>
-
-      <div class="fields-row">
-        <input id="studentName" type="text" placeholder="Student name" />
-        <input id="groupName" type="text" placeholder="Group name" />
-        <button id="startBtn" class="btn btn-primary">Start Test</button>
-      </div>
-
-      <div id="content" class="content">
-        <div class="section-label">Welcome</div>
-        <div class="section-title">How it works</div>
-        <div class="questions">
-          1. Enter your name and group.{"\n"}
-          2. Click <strong>Start Test</strong>.{"\n"}
-          3. The test will move automatically through:{"\n"}
-             • Part 1.1 → Part 1.2{"\n"}
-             • Part 2 (preparation + speaking){"\n"}
-             • Part 3 (preparation + speaking){"\n"}
-          4. There will be a short 4-second screen: “Let’s move to …” between each part.{"\n"}
-          5. At the end, your full recording is sent to your teacher on Telegram.
-        </div>
-      </div>
-
-      <div id="status" class="status"></div>
-      <audio id="audioPreview" controls style="display:none;"></audio>
-    </div>
-  </div>
+  <div class="grain"></div>
+  <div class="app-shell" id="app-root"></div>
 
   <script>
-    const startBtn      = document.getElementById('startBtn');
-    const contentEl     = document.getElementById('content');
-    const timerDisplay  = document.getElementById('timerDisplay');
-    const statusEl      = document.getElementById('status');
-    const audioPreview  = document.getElementById('audioPreview');
-    const studentNameEl = document.getElementById('studentName');
-    const groupNameEl   = document.getElementById('groupName');
+    const app = document.getElementById("app-root");
 
-    let mediaRecorder;
-    let recordedChunks = [];
-    let currentStepIndex = 0;
-    let stepTimerId = null;
-    let countdownId = null;
-
-    // --------- STEPS (with 4-second transitions) ---------
-    const steps = [
-      // Part 1.1 – speaking
-      { type: 'part', mode: 'speak', id: 'part1_1', label: 'Part 1.1', duration: 90 },
-
-      // 4-second interval
-      { type: 'transition', fromLabel: 'Part 1.1', toLabel: 'Part 1.2', duration: 4 },
-
-      // Part 1.2 – speaking
-      { type: 'part', mode: 'speak', id: 'part1_2', label: 'Part 1.2', duration: 90 },
-
-      // 4-second interval
-      { type: 'transition', fromLabel: 'Part 1.2', toLabel: 'Part 2 – preparation', duration: 4 },
-
-      // Part 2 – preparation time
-      { type: 'prep', id: 'part2', label: 'Part 2 – Preparation', duration: 60 },
-
-      // Part 2 – speaking
-      { type: 'part', mode: 'speak', id: 'part2', label: 'Part 2 – Speaking', duration: 120 },
-
-      // 4-second interval
-      { type: 'transition', fromLabel: 'Part 2', toLabel: 'Part 3 – preparation', duration: 4 },
-
-      // Part 3 – preparation time
-      { type: 'prep', id: 'part3', label: 'Part 3 – Preparation', duration: 60 },
-
-      // Part 3 – speaking
-      { type: 'part', mode: 'speak', id: 'part3', label: 'Part 3 – Speaking', duration: 180 }
+    // --- CONFIG: QUESTION SETS -----------------------------------
+    const speakingSets = [
+      {
+        id: 1,
+        name: "Speaking Set 1",
+        active: true,
+        description: "Daily routine & school mornings",
+        part1_1: [
+          "What time do you usually wake up?",
+          "Do you like going to the park?",
+          "What do you do when you feel tired?"
+        ],
+        part1_2: {
+          image:
+            "https://i.ibb.co/pr9hGkwx/Screenshot-2025-12-03-at-00-02-09.png",
+          questions: [
+            "What do you see in these pictures?",
+            "Why do some people like waking up early?",
+            "Which do you prefer, waking up early or late, and why?"
+          ]
+        },
+        part2: {
+          main: "Talk about a time when you were late for something important.",
+          prompts: [
+            "What happened and how did you feel?",
+            "Why is being on time important?"
+          ]
+        },
+        part3: {
+          topic: "Should schools start later in the morning?",
+          for: [
+            "Students need more sleep to stay healthy",
+            "Late classes can help improve focus",
+            "It reduces morning stress and rushing"
+          ],
+          against: [
+            "It may shorten study hours",
+            "Parents might find schedules harder",
+            "Students can become lazy"
+          ]
+        }
+      },
+      ...Array.from({ length: 9 }).map((_, i) => ({
+        id: i + 2,
+        name: `Speaking Set ${i + 2}`,
+        active: false,
+        comingSoon: true,
+        description: "Coming soon"
+      }))
     ];
 
-    // --------- QUESTIONS & CONTENT ---------
-    const questionsByPart = {
-      part1_1: {
-        title: 'Work & Study',
-        text: [
-          '1. Are you a student, or do you work?',
-          '2. Why did you choose that job?',
-          '3. Do you like your job?',
-          '4. What do you dislike about your study?',
-          '5. What kind of bags do you use?',
-          '6. What bags are comfortable when you travel: small bags or big ones?'
-        ].join('\\n')
+    // --- STATE ---------------------------------------------------
+    const state = {
+      page: "login", // login | menu | overview | test | done
+      student: {
+        firstName: "",
+        surname: "",
+        group: "",
+        date: new Date().toLocaleDateString("en-GB"),
+        time: new Date().toLocaleTimeString("en-GB", {
+          hour: "2-digit",
+          minute: "2-digit"
+        })
       },
-      part1_2: {
-        title: 'Follow-up Questions',
-        text: [
-          '(Add your Part 1.2 questions here.)',
-          'Keep speaking until the time finishes.'
-        ].join('\\n')
+      selectedSet: null,
+      test: {
+        part: null, // "p11" | "p12" | "p2" | "p3"
+        questionIndex: 0,
+        phase: null, // "read" | "speak" | "prep"
+        secondsLeft: 0
       },
-      part2: {
-        title: 'Describe the film you were disappointed in',
-        text: [
-          'You should say:',
-          '• what film it was',
-          '• when you watched it',
-          '• why it disappointed you',
-          '',
-          'and explain how you felt about it overall.'
-        ].join('\\n'),
-        prepNote: 'You have 1 minute to prepare. Read the whole task carefully and think of your ideas and examples.'
-      },
-      part3: {
-        title: 'Discussion – Films & Actors',
-        text: [
-          '1. Are actors’ and actresses’ lives interesting?',
-          '2. Should there be a difference in paying actors and actresses?',
-          '3. What kind of movies are popular in your country?',
-          '4. Should the government spend more money on films?'
-        ].join('\\n'),
-        // Arguments for and against – shown in preparation + speaking
-        arguments: [
-          'Possible arguments FOR:',
-          '• Films create jobs and support the economy.',
-          '• Famous actors can be good role models.',
-          '• Movies can educate people about history and cultures.',
-          '',
-          'Possible arguments AGAINST:',
-          '• Actors sometimes earn much more than teachers or doctors.',
-          '• Some films show violence or unhealthy behaviour.',
-          '• Governments may have more important areas to invest in (healthcare, education, etc.).'
-        ].join('\\n')
-      }
+      timerId: null,
+      isRecording: false,
+      mediaRecorder: null,
+      audioChunks: [],
+      audioBlob: null,
+      stream: null,
+      audioContext: null,
+      analyser: null,
+      waveBars: Array.from({ length: 20 }, () => 5),
+      blobPromise: null,
+      blobResolve: null
     };
 
-    // --------- TIMER UTILITIES ---------
-    function formatTime(totalSeconds) {
-      const m = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
-      const s = String(totalSeconds % 60).padStart(2, '0');
-      return \`\${m}:\${s}\`;
-    }
-
-    function updateTimerDisplay(secondsLeft) {
-      timerDisplay.textContent = formatTime(secondsLeft);
-    }
-
-    function clearAllTimers() {
-      if (stepTimerId) {
-        clearTimeout(stepTimerId);
-        stepTimerId = null;
-      }
-      if (countdownId) {
-        clearInterval(countdownId);
-        countdownId = null;
+    // --- RENDER ROOT ---------------------------------------------
+    function render() {
+      if (state.page === "login") {
+        renderLogin();
+      } else if (state.page === "menu") {
+        renderMenu();
+      } else if (state.page === "overview") {
+        renderOverview();
+      } else if (state.page === "test") {
+        renderTest();
+      } else if (state.page === "done") {
+        renderDone();
       }
     }
 
-    // --------- MAIN FLOW ---------
-    async function startTest() {
-      const name = studentNameEl.value.trim();
-      const group = groupNameEl.value.trim();
+    // --- LOGIN ---------------------------------------------------
+    function renderLogin() {
+      app.innerHTML = `
+        <header class="app-header">
+          <div class="brand">
+            <div class="brand-logo">S</div>
+            <div class="brand-text">
+              <h1>CEFR Speaking Lab</h1>
+              <p>Teacher receives your recording on Telegram</p>
+            </div>
+          </div>
+          <div class="chip">
+            <span class="chip-dot"></span>
+            Student login
+          </div>
+        </header>
 
-      if (!name || !group) {
-        alert('Please enter your name and group before starting the test.');
+        <section class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Log in to start speaking</div>
+              <div class="card-subtitle">
+                Enter your details exactly. They are sent with your recording.
+              </div>
+            </div>
+            <span class="badge badge-accent">Step 1</span>
+          </div>
+
+          <div class="input-grid">
+            <div>
+              <div class="field-label">First name</div>
+              <input id="firstName" class="field-input" placeholder="e.g. Doniyor" value="${state.student.firstName}">
+            </div>
+            <div>
+              <div class="field-label">Surname</div>
+              <input id="surname" class="field-input" placeholder="e.g. Eshmurodov" value="${state.student.surname}">
+            </div>
+            <div>
+              <div class="field-label">Group</div>
+              <input id="group" class="field-input" placeholder="e.g. CEFR B1 – Everest" value="${state.student.group}">
+            </div>
+          </div>
+
+          <p class="helper-text">
+            Example: <strong>CEFR B1 – Evening</strong>, <strong>IELTS Intro – 17:00</strong>, etc.
+          </p>
+
+          <div class="btn-row">
+            <button class="btn btn-primary" onclick="handleLogin()">Continue to menu →</button>
+          </div>
+        </section>
+      `;
+    }
+
+    function handleLogin() {
+      const firstName = document.getElementById("firstName").value.trim();
+      const surname = document.getElementById("surname").value.trim();
+      const group = document.getElementById("group").value.trim();
+
+      if (!firstName || !surname || !group) {
+        alert("Please fill in your first name, surname and group.");
         return;
       }
 
-      startBtn.disabled = true;
-      statusEl.textContent = 'Requesting microphone access…';
+      state.student.firstName = firstName;
+      state.student.surname = surname;
+      state.student.group = group;
+      state.page = "menu";
+      render();
+    }
 
+    // --- MENU ----------------------------------------------------
+    function renderMenu() {
+      const activeCount = speakingSets.filter((s) => s.active).length;
+
+      app.innerHTML = `
+        <header class="app-header">
+          <div class="brand">
+            <div class="brand-logo">S</div>
+            <div class="brand-text">
+              <h1>Main Menu</h1>
+              <p>${state.student.firstName || "Student"} ${
+        state.student.surname || ""
+      } · ${state.student.group || "Group"}</p>
+            </div>
+          </div>
+          <div class="chip">
+            <span class="chip-dot"></span>
+            ${activeCount} active set${activeCount !== 1 ? "s" : ""}
+          </div>
+        </header>
+
+        <section class="menu-layout">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Choose your speaking set</div>
+                <div class="card-subtitle">
+                  Only Set 1 is active now. Other sets are coming soon.
+                </div>
+              </div>
+              <span class="badge">10 sets</span>
+            </div>
+
+            <div class="set-grid">
+              ${speakingSets
+                .map((set) => {
+                  if (!set.active) {
+                    return `
+                      <div class="set-card disabled">
+                        <div class="set-label-row">
+                          <div class="set-icon">${set.id}</div>
+                          <div>
+                            <div class="set-name">${set.name}</div>
+                            <div class="set-meta">${set.description}</div>
+                          </div>
+                          <span class="pill-coming">Coming soon</span>
+                        </div>
+                      </div>
+                    `;
+                  }
+                  return `
+                    <div class="set-card" onclick="openSet(${set.id})">
+                      <div class="set-label-row">
+                        <div class="set-icon">${set.id}</div>
+                        <div>
+                          <div class="set-name">${set.name}</div>
+                          <div class="set-meta">${set.description}</div>
+                        </div>
+                      </div>
+                    </div>
+                  `;
+                })
+                .join("")}
+            </div>
+          </div>
+
+          <aside class="info-block">
+            <div class="info-title">How this test works</div>
+            <ul class="info-list">
+              <li>First you see all questions and the picture.</li>
+              <li>Then you click <strong>Start speaking</strong>.</li>
+              <li>You see one question at a time in full screen.</li>
+              <li>Reading / preparation and speaking time are automatic.</li>
+              <li>Your voice is recorded and sent to your teacher on Telegram.</li>
+            </ul>
+
+            <div class="stat-row">
+              <div class="stat-pill">📅 ${state.student.date}</div>
+              <div class="stat-pill">⏰ ${state.student.time}</div>
+              <div class="stat-pill">👤 ${state.student.firstName} ${
+        state.student.surname
+      }</div>
+              <div class="stat-pill">👥 ${state.student.group}</div>
+            </div>
+          </aside>
+        </section>
+      `;
+    }
+
+    function openSet(id) {
+      const set = speakingSets.find((s) => s.id === id);
+      if (!set || !set.active) return;
+      state.selectedSet = set;
+      state.page = "overview";
+      render();
+    }
+
+    // --- SET OVERVIEW --------------------------------------------
+    function renderOverview() {
+      const set = state.selectedSet;
+      if (!set) {
+        state.page = "menu";
+        render();
+        return;
+      }
+
+      app.innerHTML = `
+        <header class="app-header">
+          <div class="brand">
+            <div class="brand-logo">S</div>
+            <div class="brand-text">
+              <h1>${set.name}</h1>
+              <p>${state.student.firstName} ${state.student.surname} · ${
+        state.student.group
+      }</p>
+            </div>
+          </div>
+          <div class="btn-row" style="margin-top:0;">
+            <button class="btn btn-secondary" onclick="backToMenu()">← Back</button>
+            <button class="btn btn-primary" onclick="startTestFromOverview()">Start speaking 🎙️</button>
+          </div>
+        </header>
+
+        <section class="set-overview-layout">
+          <div class="section-block">
+            <div class="section-title">Part 1.1 – Short questions</div>
+            <div class="section-sub">
+              You will answer each question one by one. First you have 5 seconds to read, then 30 seconds to answer.
+            </div>
+            <ul class="question-list">
+              ${set.part1_1.map((q, i) => `<li>${i + 1}. ${q}</li>`).join("")}
+            </ul>
+
+            <div style="margin-top:12px; border-top:1px dashed var(--border); padding-top:10px;">
+              <div class="section-title">Part 1.2 – Picture questions</div>
+              <div class="section-sub">
+                You have 5 seconds to read each question. For question 1 you get 45 seconds to answer, for questions 2 and 3 you get 30 seconds.
+              </div>
+              <div class="picture-wrapper">
+                <img src="${set.part1_2.image}" alt="Part 1.2 picture">
+              </div>
+              <ul class="question-list" style="margin-top:8px;">
+                ${set.part1_2.questions
+                  .map((q, i) => `<li>${i + 1}. ${q}</li>`)
+                  .join("")}
+              </ul>
+            </div>
+          </div>
+
+          <div class="section-block">
+            <div class="section-title">Part 2 – Long turn</div>
+            <div class="section-sub">
+              You will have 1 minute to prepare and 2 minutes to speak.
+            </div>
+            <p><strong>${set.part2.main}</strong></p>
+            <ul class="question-list" style="margin-top:6px;">
+              ${set.part2.prompts.map((p) => `<li>${p}</li>`).join("")}
+            </ul>
+
+            <div style="margin-top:14px; border-top:1px dashed var(--border); padding-top:10px;">
+              <div class="section-title">Part 3 – Discussion</div>
+              <div class="section-sub">
+                Topic: <strong>${set.part3.topic}</strong><br>
+                1 minute to prepare and 2 minutes to discuss.
+              </div>
+              <div class="columns-two">
+                <div class="for-block">
+                  <div class="for-title">FOR</div>
+                  <ul class="mini-list">
+                    ${set.part3.for.map((p) => `<li>${p}</li>`).join("")}
+                  </ul>
+                </div>
+                <div class="against-block">
+                  <div class="against-title">AGAINST</div>
+                  <ul class="mini-list">
+                    ${set.part3.against.map((p) => `<li>${p}</li>`).join("")}
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="overview-footer">
+              <span>
+                When you click <strong>Start speaking</strong>, your microphone turns on and the timer starts.
+              </span>
+              <span>Parts run automatically: 1.1 → 1.2 → 2 → 3.</span>
+            </div>
+          </div>
+        </section>
+      `;
+    }
+
+    function backToMenu() {
+      state.selectedSet = null;
+      state.page = "menu";
+      render();
+    }
+
+    // --- TEST FLOW & TIMERS -------------------------------------
+    function startTestFromOverview() {
+      const set = state.selectedSet;
+      if (!set) return;
+      startRecordingAndTest();
+    }
+
+    async function startRecordingAndTest() {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        mediaRecorder = new MediaRecorder(stream);
-        recordedChunks = [];
+        state.stream = stream;
+        state.mediaRecorder = new MediaRecorder(stream);
+        state.audioChunks = [];
+        state.audioBlob = null;
 
-        mediaRecorder.ondataavailable = (event) => {
-          if (event.data.size > 0) {
-            recordedChunks.push(event.data);
+        state.blobPromise = new Promise((resolve) => {
+          state.blobResolve = resolve;
+        });
+
+        state.mediaRecorder.ondataavailable = (e) => {
+          if (e.data && e.data.size > 0) {
+            state.audioChunks.push(e.data);
           }
         };
 
-        mediaRecorder.onstop = handleRecordingComplete;
+        state.mediaRecorder.onstop = () => {
+          const mime =
+            state.audioChunks[0]?.type ||
+            state.mediaRecorder.mimeType ||
+            "audio/webm";
+          const blob = new Blob(state.audioChunks, { type: mime });
+          state.audioBlob = blob;
+          if (state.blobResolve) {
+            state.blobResolve(blob);
+            state.blobResolve = null;
+          }
+        };
 
-        // Start one long recording for the whole test
-        mediaRecorder.start();
-        statusEl.textContent = 'Recording… Speak clearly and follow the instructions.';
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        state.audioContext = new AudioCtx();
+        const source = state.audioContext.createMediaStreamSource(stream);
+        state.analyser = state.audioContext.createAnalyser();
+        state.analyser.fftSize = 256;
+        source.connect(state.analyser);
 
-        currentStepIndex = 0;
-        runCurrentStep();
+        state.isRecording = true;
+        state.mediaRecorder.start();
+
+        state.test.part = "p11";
+        state.test.questionIndex = 0;
+        state.test.phase = "read";
+        state.test.secondsLeft = 5;
+
+        state.page = "test";
+        render();
+        startVisualizer();
+        startTimer();
       } catch (err) {
         console.error(err);
-        alert('Could not access microphone. Please allow microphone permission.');
-        startBtn.disabled = false;
-        statusEl.textContent = 'Microphone access denied.';
+        alert(
+          "Could not access your microphone. Please allow microphone access and try again."
+        );
       }
     }
 
-    function runCurrentStep() {
-      clearAllTimers();
+    function startVisualizer() {
+      if (!state.analyser) return;
 
-      if (currentStepIndex >= steps.length) {
-        finishTest();
+      const bufferLength = state.analyser.frequencyBinCount;
+      const dataArray = new Uint8Array(bufferLength);
+
+      function draw() {
+        if (!state.analyser || !state.isRecording) return;
+        state.analyser.getByteFrequencyData(dataArray);
+
+        state.waveBars = state.waveBars.map((_, index) => {
+          const idx = Math.floor(index * (bufferLength / state.waveBars.length));
+          const value = dataArray[idx] / 255;
+          return Math.max(5, Math.floor(value * 26));
+        });
+
+        const el = document.getElementById("wave");
+        if (el) {
+          el.innerHTML = state.waveBars
+            .map((h) => `<div class="wave-bar" style="height:${h}px"></div>`)
+            .join("");
+        }
+
+        requestAnimationFrame(draw);
+      }
+
+      draw();
+    }
+
+    function startTimer() {
+      clearInterval(state.timerId);
+      state.timerId = setInterval(() => {
+        if (state.test.secondsLeft > 0) {
+          state.test.secondsLeft -= 1;
+          render();
+        } else {
+          advanceTestState();
+        }
+      }, 1000);
+    }
+
+    function advanceTestState() {
+      const set = state.selectedSet;
+      const t = state.test;
+
+      if (t.part === "p11") {
+        if (t.phase === "read") {
+          t.phase = "speak";
+          t.secondsLeft = 30;
+        } else {
+          if (t.questionIndex < set.part1_1.length - 1) {
+            t.questionIndex += 1;
+            t.phase = "read";
+            t.secondsLeft = 5;
+          } else {
+            t.part = "p12";
+            t.questionIndex = 0;
+            t.phase = "read";
+            t.secondsLeft = 5;
+          }
+        }
+      } else if (t.part === "p12") {
+        if (t.phase === "read") {
+          t.phase = "speak";
+          t.secondsLeft = t.questionIndex === 0 ? 45 : 30;
+        } else {
+          if (t.questionIndex < set.part1_2.questions.length - 1) {
+            t.questionIndex += 1;
+            t.phase = "read";
+            t.secondsLeft = 5;
+          } else {
+            t.part = "p2";
+            t.questionIndex = 0;
+            t.phase = "prep";
+            t.secondsLeft = 60;
+          }
+        }
+      } else if (t.part === "p2") {
+        if (t.phase === "prep") {
+          t.phase = "speak";
+          t.secondsLeft = 120;
+        } else {
+          t.part = "p3";
+          t.phase = "prep";
+          t.secondsLeft = 60;
+        }
+      } else if (t.part === "p3") {
+        if (t.phase === "prep") {
+          t.phase = "speak";
+          t.secondsLeft = 120;
+        } else {
+          finishTest();
+          return;
+        }
+      }
+
+      render();
+      startTimer();
+    }
+
+    async function finishTest() {
+      clearInterval(state.timerId);
+
+      if (state.mediaRecorder && state.isRecording) {
+        try {
+          state.mediaRecorder.stop();
+        } catch {}
+        if (state.blobPromise) {
+          try {
+            await state.blobPromise;
+          } catch {}
+        }
+      }
+
+      if (state.audioContext) {
+        try {
+          await state.audioContext.close();
+        } catch {}
+      }
+      if (state.stream) {
+        state.stream.getTracks().forEach((t) => t.stop());
+        state.stream = null;
+      }
+
+      state.isRecording = false;
+      state.page = "done";
+      render();
+      sendToTelegram();
+    }
+
+    // --- TEST RENDER ---------------------------------------------
+    function renderTest() {
+      const set = state.selectedSet;
+      const t = state.test;
+      if (!set) {
+        state.page = "menu";
+        render();
         return;
       }
 
-      const step = steps[currentStepIndex];
+      const { title, subtitle, questionText, extraHtml, showImage, progress } =
+        buildTestView(set, t);
 
-      if (step.type === 'part') {
-        runPartStep(step);
-      } else if (step.type === 'prep') {
-        runPrepStep(step);
-      } else if (step.type === 'transition') {
-        runTransitionStep(step);
-      }
+      app.innerHTML = `
+        <header class="app-header">
+          <div class="brand">
+            <div class="brand-logo">S</div>
+            <div class="brand-text">
+              <h1>${set.name}</h1>
+              <p>${state.student.firstName} ${state.student.surname} · ${
+        state.student.group
+      }</p>
+            </div>
+          </div>
+          <button class="btn btn-secondary" onclick="finishTest()">Finish now</button>
+        </header>
+
+        <section class="test-card">
+          <div class="test-top-row">
+            <div>
+              <div class="test-title">${title}</div>
+              <div class="test-subtitle">${subtitle}</div>
+              <div class="progress-bar">
+                <div class="progress-inner" style="width:${progress}%"></div>
+              </div>
+            </div>
+            <div class="record-indicator">
+              <span class="record-dot"></span>
+              <span>Recording</span>
+            </div>
+          </div>
+
+          <div class="test-main">
+            <div class="test-part-label">${phaseLabel(t)}</div>
+            <div class="test-question">${questionText}</div>
+            ${
+              extraHtml
+                ? `<div class="test-extra">${extraHtml}</div>`
+                : ""
+            }
+            ${
+              showImage
+                ? `<div class="test-image"><img src="${set.part1_2.image}" alt="Picture for Part 1.2"></div>`
+                : ""
+            }
+          </div>
+
+          <div class="timer-row">
+            <div>
+              <div class="timer-label">${timerLabel(t)}</div>
+              <div class="timer-value">${formatTime(t.secondsLeft)}</div>
+            </div>
+            <div id="wave" class="wave">
+              ${state.waveBars
+                .map((h) => `<div class="wave-bar" style="height:${h}px"></div>`)
+                .join("")}
+            </div>
+          </div>
+
+          <div class="test-footer">
+            <span>Test runs automatically. Just watch the timer and keep speaking.</span>
+            <span>Current part: ${simplePartName(t.part)}</span>
+          </div>
+        </section>
+      `;
     }
 
-    function runPartStep(step) {
-      const { id, label, duration } = step;
-      const q = questionsByPart[id];
+    function buildTestView(set, t) {
+      let title = "";
+      let subtitle = "";
+      let questionText = "";
+      let extraHtml = "";
+      let showImage = false;
+      let progress = 0;
 
-      contentEl.innerHTML = '';
+      const totalSteps =
+        set.part1_1.length +
+        set.part1_2.questions.length +
+        2 + // Part 2 prep + speak
+        2; // Part 3 prep + speak
 
-      const sectionLabel = document.createElement('div');
-      sectionLabel.className = 'section-label';
-      sectionLabel.textContent = 'Speaking time';
+      let currentStepIndex = 0;
 
-      const title = document.createElement('div');
-      title.className = 'section-title';
-      title.textContent = label + (q?.title ? ' – ' + q.title : '');
-
-      const questions = document.createElement('div');
-      questions.className = 'questions';
-
-      let fullText = q?.text || '(No questions defined yet)';
-      if (id === 'part3' && q?.arguments) {
-        fullText += '\\n\\n' + q.arguments;
+      if (t.part === "p11") {
+        currentStepIndex = t.questionIndex;
+      } else if (t.part === "p12") {
+        currentStepIndex = set.part1_1.length + t.questionIndex;
+      } else if (t.part === "p2") {
+        currentStepIndex = set.part1_1.length + set.part1_2.questions.length;
+        if (t.phase === "speak") currentStepIndex += 1;
+      } else if (t.part === "p3") {
+        currentStepIndex =
+          set.part1_1.length + set.part1_2.questions.length + 2;
+        if (t.phase === "speak") currentStepIndex += 1;
       }
 
-      questions.textContent = fullText;
+      progress = Math.min(
+        100,
+        ((currentStepIndex + 1) / totalSteps) * 100
+      );
 
-      contentEl.appendChild(sectionLabel);
-      contentEl.appendChild(title);
-      contentEl.appendChild(questions);
+      if (t.part === "p11") {
+        title = "Part 1.1 – Short questions";
+        subtitle = "5 seconds to read, 30 seconds to answer each question.";
+        questionText = set.part1_1[t.questionIndex];
+      } else if (t.part === "p12") {
+        title = "Part 1.2 – Picture questions";
+        subtitle =
+          "Look at the picture. 5 seconds to read, then answer the question.";
+        questionText = set.part1_2.questions[t.questionIndex];
+        showImage = true;
+      } else if (t.part === "p2") {
+        title = "Part 2 – Long turn";
+        subtitle =
+          "You have 1 minute to prepare and then 2 minutes to speak.";
+        questionText = set.part2.main;
 
-      let secondsLeft = duration;
-      updateTimerDisplay(secondsLeft);
+        const promptsHtml = `
+          <ul class="mini-list">
+            ${set.part2.prompts.map((p) => `<li>${p}</li>`).join("")}
+          </ul>
+        `;
 
-      countdownId = setInterval(() => {
-        secondsLeft--;
-        updateTimerDisplay(secondsLeft);
-        if (secondsLeft <= 0) {
-          clearInterval(countdownId);
+        if (t.phase === "prep") {
+          extraHtml = `
+            <p>Use the points below to plan your answer:</p>
+            ${promptsHtml}
+          `;
+        } else {
+          extraHtml = `
+            <p>While you speak, try to cover these points:</p>
+            ${promptsHtml}
+          `;
         }
-      }, 1000);
+      } else if (t.part === "p3") {
+        title = "Part 3 – Discussion";
+        subtitle =
+          "1 minute to prepare ideas, then 2 minutes to discuss both sides.";
+        questionText = set.part3.topic;
 
-      stepTimerId = setTimeout(() => {
-        currentStepIndex++;
-        runCurrentStep();
-      }, duration * 1000);
-    }
+        const forAgainstHtml = `
+          <div class="columns-two">
+            <div class="for-block">
+              <div class="for-title">FOR</div>
+              <ul class="mini-list">
+                ${set.part3.for.map((p) => `<li>${p}</li>`).join("")}
+              </ul>
+            </div>
+            <div class="against-block">
+              <div class="against-title">AGAINST</div>
+              <ul class="mini-list">
+                ${set.part3.against.map((p) => `<li>${p}</li>`).join("")}
+              </ul>
+            </div>
+          </div>
+        `;
 
-    function runPrepStep(step) {
-      const { id, label, duration } = step;
-      const q = questionsByPart[id];
-
-      contentEl.innerHTML = '';
-
-      const sectionLabel = document.createElement('div');
-      sectionLabel.className = 'section-label';
-      sectionLabel.textContent = 'Preparation time';
-
-      const title = document.createElement('div');
-      title.className = 'section-title';
-      title.textContent = label + (q?.title ? ' – ' + q.title : '');
-
-      const questions = document.createElement('div');
-      questions.className = 'questions';
-
-      let fullText = q?.text || '';
-      if (id === 'part2' && q?.prepNote) {
-        fullText = q.prepNote + '\\n\\n' + fullText;
-      }
-      if (id === 'part3' && q?.arguments) {
-        fullText = 'Use this time to read the questions and think of arguments.' + '\\n\\n' + q.text + '\\n\\n' + q.arguments;
-      }
-
-      questions.textContent = fullText || '(No content defined yet)';
-
-      contentEl.appendChild(sectionLabel);
-      contentEl.appendChild(title);
-      contentEl.appendChild(questions);
-
-      let secondsLeft = duration;
-      updateTimerDisplay(secondsLeft);
-
-      countdownId = setInterval(() => {
-        secondsLeft--;
-        updateTimerDisplay(secondsLeft);
-        if (secondsLeft <= 0) {
-          clearInterval(countdownId);
+        if (t.phase === "prep") {
+          extraHtml = `
+            <p>Look at the arguments for and against. Decide which side you agree with and plan your reasons.</p>
+            ${forAgainstHtml}
+          `;
+        } else {
+          extraHtml = `
+            <p>Use these points while speaking. Explain both sides and then give your own opinion.</p>
+            ${forAgainstHtml}
+          `;
         }
-      }, 1000);
-
-      stepTimerId = setTimeout(() => {
-        currentStepIndex++;
-        runCurrentStep();
-      }, duration * 1000);
-    }
-
-    function runTransitionStep(step) {
-      const { fromLabel, toLabel, duration } = step;
-
-      contentEl.innerHTML = '';
-      const label = document.createElement('div');
-      label.className = 'section-label';
-      label.textContent = 'Transition';
-
-      const message = document.createElement('div');
-      message.className = 'transition-text';
-      message.textContent = \`Let’s move to \${toLabel}.\`;
-
-      const note = document.createElement('div');
-      note.className = 'questions';
-      note.style.textAlign = 'center';
-      note.textContent = 'Get ready for the next part. Do not stop speaking for a long time during the test.';
-
-      contentEl.appendChild(label);
-      contentEl.appendChild(message);
-      contentEl.appendChild(note);
-
-      let secondsLeft = duration;
-      updateTimerDisplay(secondsLeft);
-
-      countdownId = setInterval(() => {
-        secondsLeft--;
-        updateTimerDisplay(secondsLeft);
-        if (secondsLeft <= 0) {
-          clearInterval(countdownId);
-        }
-      }, 1000);
-
-      stepTimerId = setTimeout(() => {
-        currentStepIndex++;
-        runCurrentStep();
-      }, duration * 1000);
-    }
-
-    function finishTest() {
-      clearAllTimers();
-      contentEl.innerHTML = '';
-
-      const label = document.createElement('div');
-      label.className = 'section-label';
-      label.textContent = 'Finished';
-
-      const title = document.createElement('div');
-      title.className = 'section-title';
-      title.textContent = 'Test finished ✅';
-
-      const text = document.createElement('div');
-      text.className = 'questions';
-      text.textContent = 'Please wait while your recording is being processed and sent to your teacher on Telegram.';
-
-      contentEl.appendChild(label);
-      contentEl.appendChild(title);
-      contentEl.appendChild(text);
-      updateTimerDisplay(0);
-
-      if (mediaRecorder && mediaRecorder.state !== 'inactive') {
-        statusEl.textContent = 'Stopping recording…';
-        mediaRecorder.stop();
-      } else {
-        statusEl.textContent = 'Recording already stopped.';
-        startBtn.disabled = false;
       }
+
+      return { title, subtitle, questionText, extraHtml, showImage, progress };
     }
 
-    async function handleRecordingComplete() {
+    function phaseLabel(t) {
+      if (t.part === "p2" || t.part === "p3") {
+        if (t.phase === "prep") return "Preparation time";
+        return "Speaking time";
+      }
+      if (t.phase === "read") return "Reading the question";
+      return "Speaking";
+    }
+
+    function timerLabel(t) {
+      if (t.part === "p2" || t.part === "p3") {
+        return t.phase === "prep" ? "Preparation time" : "Speaking time";
+      }
+      return t.phase === "read" ? "Reading time" : "Speaking time";
+    }
+
+    function simplePartName(part) {
+      if (part === "p11") return "Part 1.1";
+      if (part === "p12") return "Part 1.2";
+      if (part === "p2") return "Part 2";
+      if (part === "p3") return "Part 3";
+      return "";
+    }
+
+    function formatTime(sec) {
+      const m = Math.floor(sec / 60);
+      const s = sec % 60;
+      return `${m}:${s.toString().padStart(2, "0")}`;
+    }
+
+    // --- COMPLETION ----------------------------------------------
+    function renderDone() {
+      app.innerHTML = `
+        <header class="app-header">
+          <div class="brand">
+            <div class="brand-logo">S</div>
+            <div class="brand-text">
+              <h1>Speaking test finished</h1>
+              <p>${state.student.firstName} ${state.student.surname} · ${
+        state.student.group
+      }</p>
+            </div>
+          </div>
+        </header>
+
+        <section class="completion-screen">
+          <h2>✅ Great job!</h2>
+          <p>
+            Your test is complete. The recording is being sent to your teacher on Telegram.
+            You can also download it for your own practice.
+          </p>
+          <div class="btn-row" style="justify-content:center;">
+            <button class="btn btn-primary" onclick="downloadRecording()">Download my recording</button>
+            <button class="btn btn-secondary" onclick="backToMenuAfterDone()">Back to main menu</button>
+          </div>
+        </section>
+      `;
+    }
+
+    function backToMenuAfterDone() {
+      state.page = "menu";
+      render();
+    }
+
+    function downloadRecording() {
+      if (!state.audioBlob) {
+        alert("No recording file found.");
+        return;
+      }
+      const setId = state.selectedSet ? state.selectedSet.id : 1;
+      const fileName = `${state.student.firstName}_${state.student.surname}_${state.student.group}_Set${setId}_${state.student.date.replace(
+        /\//g,
+        "-"
+      )}_${state.student.time.replace(/:/g, "-")}.webm`;
+      const url = URL.createObjectURL(state.audioBlob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    // --- TELEGRAM API CALL ---------------------------------------
+    async function sendToTelegram() {
+      if (!state.audioBlob || !state.selectedSet) return;
+
       try {
-        const blob = new Blob(recordedChunks, { type: 'audio/webm' });
-        const url = URL.createObjectURL(blob);
-        audioPreview.src = url;
-        audioPreview.style.display = 'block';
+        const base64Audio = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            const result = reader.result || "";
+            const base64 =
+              typeof result === "string" && result.includes(",")
+                ? result.split(",")[1]
+                : result;
+            resolve(base64);
+          };
+          reader.onerror = () =>
+            reject(reader.error || new Error("Failed to read audio"));
+          reader.readAsDataURL(state.audioBlob);
+        });
 
-        statusEl.textContent = 'Uploading recording to teacher…';
+        const res = await fetch("/api/sendRecording", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            firstName: state.student.firstName,
+            surname: state.student.surname,
+            group: state.student.group,
+            setName: state.selectedSet.name,
+            date: state.student.date,
+            time: state.student.time,
+            audioBase64: base64Audio
+          })
+        });
 
-        await uploadRecordingToServer(blob);
-        statusEl.textContent = 'Recording uploaded successfully ✅';
+        const data = await res.json();
+        if (!res.ok || !data.ok) {
+          console.error("Telegram error:", data);
+          alert(
+            "Recording saved, but sending to Telegram failed. Please tell your teacher."
+          );
+        }
       } catch (err) {
-        console.error(err);
-        statusEl.textContent = 'Error uploading recording. Please tell your teacher.';
-      } finally {
-        startBtn.disabled = false;
+        console.error("sendToTelegram error:", err);
+        alert(
+          "Recording saved, but sending to Telegram failed. Please tell your teacher."
+        );
       }
     }
 
-    // Convert Blob -> base64 so we can send JSON to the API
-    function blobToBase64(blob) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          const dataUrl = reader.result;
-          const base64 = String(dataUrl).split(',')[1] || '';
-          resolve(base64);
-        };
-        reader.onerror = reject;
-        reader.readAsDataURL(blob);
-      });
-    }
+    // --- GLOBALS FOR INLINE HANDLERS -----------------------------
+    window.handleLogin = handleLogin;
+    window.openSet = openSet;
+    window.backToMenu = backToMenu;
+    window.startTestFromOverview = startTestFromOverview;
+    window.finishTest = finishTest;
+    window.downloadRecording = downloadRecording;
+    window.backToMenuAfterDone = backToMenuAfterDone;
 
-    async function uploadRecordingToServer(blob) {
-      const audioBase64 = await blobToBase64(blob);
-      const payload = {
-        audioBase64,
-        mimeType: blob.type,
-        studentName: studentNameEl.value.trim(),
-        groupName: groupNameEl.value.trim()
-      };
-
-      const response = await fetch('/api/sendRecording', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-
-      if (!response.ok) {
-        const text = await response.text();
-        throw new Error('Upload failed: ' + text);
-      }
-    }
-
-    startBtn.addEventListener('click', startTest);
+    // initial render
+    render();
   </script>
 </body>
 </html>
