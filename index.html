@@ -48,9 +48,9 @@
     }
 
     .app-shell {
-      max-width: 1200px;
+      max-width: 1320px;
       margin: 24px auto 40px;
-      padding: 0 16px;
+      padding: 0 18px;
     }
 
     .app-header {
@@ -68,15 +68,15 @@
     }
 
     .brand-logo {
-      width: 40px;
-      height: 40px;
+      width: 46px;
+      height: 46px;
       border-radius: 18px;
       background: radial-gradient(circle at 30% 20%, #f9fafb, #e5e7eb 40%, #0f172a 80%);
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 800;
-      font-size: 18px;
+      font-size: 20px;
       color: #020617;
       box-shadow: 0 12px 35px rgba(15, 23, 42, 0.9);
     }
@@ -251,32 +251,35 @@
 
     .menu-layout {
       display: grid;
-      grid-template-columns: minmax(0, 2.1fr) minmax(0, 1.3fr);
-      gap: 18px;
+      grid-template-columns: minmax(0, 2.7fr) minmax(0, 1.1fr);
+      gap: 22px;
       margin-top: 10px;
     }
 
     .set-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-      gap: 12px;
-      margin-top: 10px;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 16px;
+      margin-top: 14px;
     }
 
     .set-card {
-      border-radius: 16px;
+      border-radius: 20px;
       border: 1px solid var(--border);
-      background: radial-gradient(circle at top left, var(--accent-soft), transparent 55%),
+      background: radial-gradient(circle at top left, var(--accent-soft), transparent 60%),
         rgba(15, 23, 42, 0.96);
-      padding: 11px 11px 13px;
+      padding: 14px 14px 16px;
       cursor: pointer;
       transition: transform 0.12s ease, box-shadow 0.12s ease,
         border-color 0.12s ease, background 0.12s ease, opacity 0.12s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
     }
 
     .set-card:hover {
       transform: translateY(-2px);
-      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.9);
+      box-shadow: 0 16px 34px rgba(15, 23, 42, 0.9);
       border-color: var(--accent-soft);
     }
 
@@ -290,16 +293,30 @@
 
     .set-label-row {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      font-size: 12px;
-      margin-bottom: 4px;
+      gap: 12px;
+    }
+
+    .set-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, #e0f2fe, #0ea5e9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: #020617;
+      box-shadow: 0 10px 24px rgba(56, 189, 248, 0.55);
+      flex-shrink: 0;
     }
 
     .set-name {
       font-weight: 600;
       letter-spacing: 0.03em;
       text-transform: uppercase;
+      font-size: 13px;
     }
 
     .set-meta {
@@ -309,16 +326,17 @@
 
     .pill-coming {
       font-size: 11px;
-      padding: 3px 6px;
+      padding: 3px 7px;
       border-radius: 999px;
       border: 1px dashed var(--border);
       color: var(--text-muted);
+      margin-left: auto;
     }
 
     .info-block {
-      border-radius: 16px;
+      border-radius: 18px;
       border: 1px solid var(--border);
-      padding: 13px 12px;
+      padding: 14px 13px;
       background: radial-gradient(circle at bottom right, rgba(94, 234, 212, 0.18), transparent 60%),
         rgba(15, 23, 42, 0.96);
       font-size: 13px;
@@ -446,6 +464,7 @@
     .mini-list {
       padding-left: 16px;
       color: var(--text-muted);
+      text-align: left;
     }
 
     .mini-list li {
@@ -538,6 +557,7 @@
     .test-extra {
       font-size: 15px;
       color: var(--text-muted);
+      max-width: 780px;
     }
 
     .test-image {
@@ -696,7 +716,6 @@
     const app = document.getElementById("app-root");
 
     // --- CONFIG: QUESTION SETS -----------------------------------
-    // To add more sets, copy speakingSets[0] structure and change texts.
     const speakingSets = [
       {
         id: 1,
@@ -761,7 +780,6 @@
         })
       },
       selectedSet: null,
-      // test state
       test: {
         part: null, // "p11" | "p12" | "p2" | "p3"
         questionIndex: 0,
@@ -769,7 +787,6 @@
         secondsLeft: 0
       },
       timerId: null,
-      // audio
       isRecording: false,
       mediaRecorder: null,
       audioChunks: [],
@@ -908,19 +925,25 @@
                     return `
                       <div class="set-card disabled">
                         <div class="set-label-row">
-                          <span class="set-name">${set.name}</span>
+                          <div class="set-icon">${set.id}</div>
+                          <div>
+                            <div class="set-name">${set.name}</div>
+                            <div class="set-meta">${set.description}</div>
+                          </div>
                           <span class="pill-coming">Coming soon</span>
                         </div>
-                        <div class="set-meta">${set.description}</div>
                       </div>
                     `;
                   }
                   return `
                     <div class="set-card" onclick="openSet(${set.id})">
                       <div class="set-label-row">
-                        <span class="set-name">${set.name}</span>
+                        <div class="set-icon">${set.id}</div>
+                        <div>
+                          <div class="set-name">${set.name}</div>
+                          <div class="set-meta">${set.description}</div>
+                        </div>
                       </div>
-                      <div class="set-meta">${set.description}</div>
                     </div>
                   `;
                 })
@@ -931,10 +954,10 @@
           <aside class="info-block">
             <div class="info-title">How this test works</div>
             <ul class="info-list">
-              <li>First you will see all questions and the picture.</li>
+              <li>First you see all questions and the picture.</li>
               <li>Then you click <strong>Start speaking</strong>.</li>
               <li>You see one question at a time in full screen.</li>
-              <li>Reading time and speaking time are automatic.</li>
+              <li>Reading / preparation and speaking time are automatic.</li>
               <li>Your voice is recorded and sent to your teacher on Telegram.</li>
             </ul>
 
@@ -1144,9 +1167,7 @@
         const el = document.getElementById("wave");
         if (el) {
           el.innerHTML = state.waveBars
-            .map(
-              (h) => `<div class="wave-bar" style="height:${h}px"></div>`
-            )
+            .map((h) => `<div class="wave-bar" style="height:${h}px"></div>`)
             .join("");
         }
 
@@ -1172,7 +1193,6 @@
       const set = state.selectedSet;
       const t = state.test;
 
-      // Part 1.1
       if (t.part === "p11") {
         if (t.phase === "read") {
           t.phase = "speak";
@@ -1183,7 +1203,6 @@
             t.phase = "read";
             t.secondsLeft = 5;
           } else {
-            // move to Part 1.2
             t.part = "p12";
             t.questionIndex = 0;
             t.phase = "read";
@@ -1200,7 +1219,6 @@
             t.phase = "read";
             t.secondsLeft = 5;
           } else {
-            // move to Part 2
             t.part = "p2";
             t.questionIndex = 0;
             t.phase = "prep";
@@ -1212,7 +1230,6 @@
           t.phase = "speak";
           t.secondsLeft = 120;
         } else {
-          // move to Part 3
           t.part = "p3";
           t.phase = "prep";
           t.secondsLeft = 60;
@@ -1271,7 +1288,7 @@
         return;
       }
 
-      const { title, subtitle, questionText, extraText, showImage, progress } =
+      const { title, subtitle, questionText, extraHtml, showImage, progress } =
         buildTestView(set, t);
 
       app.innerHTML = `
@@ -1307,8 +1324,8 @@
             <div class="test-part-label">${phaseLabel(t)}</div>
             <div class="test-question">${questionText}</div>
             ${
-              extraText
-                ? `<div class="test-extra">${extraText}</div>`
+              extraHtml
+                ? `<div class="test-extra">${extraHtml}</div>`
                 : ""
             }
             ${
@@ -1342,7 +1359,7 @@
       let title = "";
       let subtitle = "";
       let questionText = "";
-      let extraText = "";
+      let extraHtml = "";
       let showImage = false;
       let progress = 0;
 
@@ -1354,7 +1371,6 @@
 
       let currentStepIndex = 0;
 
-      // count steps passed before current part
       if (t.part === "p11") {
         currentStepIndex = t.questionIndex;
       } else if (t.part === "p12") {
@@ -1388,18 +1404,61 @@
         subtitle =
           "You have 1 minute to prepare and then 2 minutes to speak.";
         questionText = set.part2.main;
-        extraText =
-          "Use the time well. Speak about the situation in as much detail as you can.";
+
+        const promptsHtml = `
+          <ul class="mini-list">
+            ${set.part2.prompts.map((p) => `<li>${p}</li>`).join("")}
+          </ul>
+        `;
+
+        if (t.phase === "prep") {
+          extraHtml = `
+            <p>Use the points below to plan your answer:</p>
+            ${promptsHtml}
+          `;
+        } else {
+          extraHtml = `
+            <p>While you speak, try to cover these points:</p>
+            ${promptsHtml}
+          `;
+        }
       } else if (t.part === "p3") {
         title = "Part 3 – Discussion";
         subtitle =
           "1 minute to prepare ideas, then 2 minutes to discuss both sides.";
         questionText = set.part3.topic;
-        extraText =
-          "Think about arguments for and against. Give your opinion with reasons.";
+
+        const forAgainstHtml = `
+          <div class="columns-two">
+            <div class="for-block">
+              <div class="for-title">FOR</div>
+              <ul class="mini-list">
+                ${set.part3.for.map((p) => `<li>${p}</li>`).join("")}
+              </ul>
+            </div>
+            <div class="against-block">
+              <div class="against-title">AGAINST</div>
+              <ul class="mini-list">
+                ${set.part3.against.map((p) => `<li>${p}</li>`).join("")}
+              </ul>
+            </div>
+          </div>
+        `;
+
+        if (t.phase === "prep") {
+          extraHtml = `
+            <p>Look at the arguments for and against. Decide which side you agree with and plan your reasons.</p>
+            ${forAgainstHtml}
+          `;
+        } else {
+          extraHtml = `
+            <p>Use these points while speaking. Explain both sides and then give your own opinion.</p>
+            ${forAgainstHtml}
+          `;
+        }
       }
 
-      return { title, subtitle, questionText, extraText, showImage, progress };
+      return { title, subtitle, questionText, extraHtml, showImage, progress };
     }
 
     function phaseLabel(t) {
@@ -1434,8 +1493,6 @@
 
     // --- COMPLETION ----------------------------------------------
     function renderDone() {
-      const set = state.selectedSet;
-
       app.innerHTML = `
         <header class="app-header">
           <div class="brand">
