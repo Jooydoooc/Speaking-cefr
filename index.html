@@ -713,6 +713,8 @@
   <div class="app-shell" id="app-root"></div>
 
   <script>
+    "use strict";
+
     const app = document.getElementById("app-root");
 
     // --- CONFIG: QUESTION SETS -----------------------------------
@@ -757,9 +759,49 @@
           ]
         }
       },
-      ...Array.from({ length: 9 }).map((_, i) => ({
-        id: i + 2,
-        name: `Speaking Set ${i + 2}`,
+      {
+        id: 2,
+        name: "Speaking Set 2",
+        active: true,
+        description: "Food & travelling with family",
+        part1_1: [
+          "Do you like playing sports?",
+          "What’s your favorite food?",
+          "Do you like living in a big city or a small town?"
+        ],
+        part1_2: {
+          image:
+            "https://i.ibb.co/6RBX6Y7w/Screenshot-2025-12-04-at-08-49-36.png",
+          questions: [
+            "What do you see in these pictures?",
+            "Why do some people prefer fast food?",
+            "Which food do you like more, fast food or healthy food, and why?"
+          ]
+        },
+        part2: {
+          main: "Describe a time when you went on a trip.",
+          prompts: [
+            "Who did you go with?",
+            "Why do people like to travel?"
+          ]
+        },
+        part3: {
+          topic: "Traveling with family.",
+          for: [
+            "It’s fun to share experiences with family.",
+            "You can make happy memories together.",
+            "Traveling with family is safer."
+          ],
+          against: [
+            "Sometimes it’s harder to plan for everyone.",
+            "Not all family members enjoy the same activities.",
+            "Family trips can be more expensive."
+          ]
+        }
+      },
+      ...Array.from({ length: 8 }).map((_, i) => ({
+        id: i + 3,
+        name: `Speaking Set ${i + 3}`,
         active: false,
         comingSoon: true,
         description: "Coming soon"
@@ -767,37 +809,65 @@
     ];
 
     // --- STATE ---------------------------------------------------
+    const now = new Date();
+
     const state = {
       page: "login", // login | menu | overview | test | done
       student: {
         firstName: "",
         surname: "",
         group: "",
-        date: new Date().toLocaleDateString("en-GB"),
-        time: new Date().toLocaleTimeString("en-GB", {
+        date: now.toLocaleDateString("en-GB"),
+        time: now.toLocaleTimeString("en-GB", {
           hour: "2-digit",
           minute: "2-digit"
         })
       },
       selectedSet: null,
       test: {
-        part: null, // "p11" | "p12" | "p2" | "p3"
+        part: null,   // "p11" | "p12" | "p2" | "p3"
         questionIndex: 0,
-        phase: null, // "read" | "speak" | "prep"
+        phase: null,  // "prestart" | "read" | "speak" | "prep"
         secondsLeft: 0
       },
       timerId: null,
-      isRecording: false,
-      mediaRecorder: null,
-      audioChunks: [],
-      audioBlob: null,
+
+      // audio / recording
       stream: null,
       audioContext: null,
       analyser: null,
       waveBars: Array.from({ length: 20 }, () => 5),
-      blobPromise: null,
-      blobResolve: null
+
+      // recording per part
+      mediaRecorder: null,
+      recordingPartKey: null, // "part1" | "part2" | "part3" | null
+      partChunks: {
+        part1: [],
+        part2: [],
+        part3: []
+      },
+      partBlobs: {
+        part1: null,
+        part2: null,
+        part3: null
+      },
+      isMicActive: false // for visualizer only
     };
+
+    // --- HELPERS -------------------------------------------------
+    function logicalPartKey(partCode) {
+      if (partCode === "p11" || partCode === "p12") return "part1";
+      if (partCode === "p2") return "part2";
+      if (partCode === "p3") return "part3";
+      return null;
+    }
+
+    function logicalPartLabel(key) {
+      if (key === "part1") return "Part 1";
+      if (key === "part2") return "Part 2";
+      if (key === "part3") return "Part 3";
+      return key;
+    }
 
     // --- RENDER ROOT ---------------------------------------------
     function render() {
@@ -878,9 +948,16 @@
         return;
       }
 
+      const now = new Date();
       state.student.firstName = firstName;
       state.student.surname = surname;
       state.student.group = group;
+      state.student.date = now.toLocaleDateString("en-GB");
+      state.student.time = now.toLocaleTimeString("en-GB", {
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+
       state.page = "menu";
       render();
     }
@@ -912,7 +989,7 @@
               <div>
                 <div class="card-title">Choose your speaking set</div>
                 <div class="card-subtitle">
-                  Only Set 1 is active now. Other sets are coming soon.
+                  Sets 1 and 2 are active now. Other sets are coming soon.
                 </div>
               </div>
               <span class="badge">10 sets</span>
@@ -958,7 +1035,8 @@
               <li>Then you click <strong>Start speaking</strong>.</li>
               <li>You see one question at a time in full screen.</li>
               <li>Reading / preparation and speaking time are automatic.</li>
-              <li>Your voice is recorded and sent to your teacher on Telegram.</li>
+              <li><strong>Recording is only ON during speaking time</strong>.</li>
+              <li>Your voice for Part 1, Part 2 and Part 3 is sent separately to your teacher on Telegram.</li>
             </ul>
 
             <div class="stat-row">
@@ -1068,9 +1146,10 @@
 
             <div class="overview-footer">
               <span>
-                When you click <strong>Start speaking</strong>, your microphone turns on and the timer starts.
+                After you click <strong>Start speaking</strong>, you will see a warning:
+                <strong>"The test will start in 3 seconds"</strong>.
               </span>
-              <span>Parts run automatically: 1.1 → 1.2 → 2 → 3.</span>
+              <span>Then parts run automatically: 1.1 → 1.2 → 2 → 3.</span>
             </div>
           </div>
         </section>
@@ -1085,12 +1164,11 @@
 
     // --- TEST FLOW & TIMERS -------------------------------------
     function startTestFromOverview() {
-      const set = state.selectedSet;
-      if (!set) return;
-      startRecordingAndTest();
+      if (!state.selectedSet) return;
+      startMicAndTest();
     }
 
-    async function startRecordingAndTest() {
+    async function startMicAndTest() {
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
         alert("Your browser does not support microphone recording. Please use the latest Chrome or Edge.");
         return;
@@ -1103,79 +1181,36 @@
 
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-
-        // Try to pick a safe mimeType
-        let options = {};
-        if (MediaRecorder.isTypeSupported("audio/webm;codecs=opus")) {
-          options.mimeType = "audio/webm;codecs=opus";
-        } else if (MediaRecorder.isTypeSupported("audio/webm")) {
-          options.mimeType = "audio/webm";
-        }
-
-        const mediaRecorder = new MediaRecorder(stream, options);
         state.stream = stream;
-        state.mediaRecorder = mediaRecorder;
-        state.audioChunks = [];
-        state.audioBlob = null;
 
-        state.blobPromise = new Promise((resolve) => {
-          state.blobResolve = resolve;
-        });
+        // reset part recordings
+        state.partChunks = { part1: [], part2: [], part3: [] };
+        state.partBlobs = { part1: null, part2: null, part3: null };
+        state.mediaRecorder = null;
+        state.recordingPartKey = null;
 
-        mediaRecorder.ondataavailable = (e) => {
-          if (e.data && e.data.size > 0) {
-            state.audioChunks.push(e.data);
-          }
-        };
-
-        mediaRecorder.onerror = (e) => {
-          console.error("MediaRecorder error:", e.error || e);
-          alert("Recording error happened. Please refresh the page and try again.");
-        };
-
-        mediaRecorder.onstop = () => {
-          try {
-            const mime =
-              state.audioChunks[0]?.type ||
-              mediaRecorder.mimeType ||
-              "audio/webm";
-            const blob = new Blob(state.audioChunks, { type: mime });
-            state.audioBlob = blob;
-            if (state.blobResolve) {
-              state.blobResolve(blob);
-              state.blobResolve = null;
-            }
-          } catch (err) {
-            console.error("Error creating final blob:", err);
-          }
-        };
-
-        // Visualizer
+        // visualizer
         const AudioCtx = window.AudioContext || window.webkitAudioContext;
         state.audioContext = new AudioCtx();
         const source = state.audioContext.createMediaStreamSource(stream);
         state.analyser = state.audioContext.createAnalyser();
         state.analyser.fftSize = 256;
         source.connect(state.analyser);
+        state.isMicActive = true;
+        startVisualizer();
 
-        state.isRecording = true;
-        // Pass timeslice so data is flushed continuously (more stable on some browsers)
-        mediaRecorder.start(1000); // collect data every second
-
+        // test initial state with 3-second warning
         state.test.part = "p11";
         state.test.questionIndex = 0;
-        state.test.phase = "read";
-        state.test.secondsLeft = 5;
+        state.test.phase = "prestart"; // warning: test starts in 3 seconds
+        state.test.secondsLeft = 3;
 
         state.page = "test";
         render();
-        startVisualizer();
         startTimer();
       } catch (err) {
         console.error("getUserMedia error:", err);
-        alert(
-          "Could not access your microphone. Please allow microphone access and try again."
-        );
+        alert("Could not access your microphone. Please allow microphone access and try again.");
       }
     }
 
@@ -1186,7 +1221,7 @@
       const dataArray = new Uint8Array(bufferLength);
 
       function draw() {
-        if (!state.analyser || !state.isRecording) return;
+        if (!state.analyser || !state.isMicActive) return;
         state.analyser.getByteFrequencyData(dataArray);
 
         state.waveBars = state.waveBars.map((_, index) => {
@@ -1220,17 +1255,69 @@
       }, 1000);
     }
 
+    function stopCurrentSegmentRecording() {
+      if (state.mediaRecorder && state.mediaRecorder.state === "recording") {
+        try {
+          state.mediaRecorder.stop();
+        } catch (e) {
+          console.error("Error stopping mediaRecorder:", e);
+        }
+      }
+      state.mediaRecorder = null;
+      state.recordingPartKey = null;
+    }
+
+    function startSegmentRecordingIfNeeded() {
+      if (!state.stream) return;
+      if (state.test.phase !== "speak") return;
+
+      const partKey = logicalPartKey(state.test.part);
+      if (!partKey) return;
+
+      let options = {};
+      if (MediaRecorder.isTypeSupported("audio/webm;codecs=opus")) {
+        options.mimeType = "audio/webm;codecs=opus";
+      } else if (MediaRecorder.isTypeSupported("audio/webm")) {
+        options.mimeType = "audio/webm";
+      }
+
+      const mr = new MediaRecorder(state.stream, options);
+      state.mediaRecorder = mr;
+      state.recordingPartKey = partKey;
+
+      mr.ondataavailable = (e) => {
+        if (e.data && e.data.size > 0) {
+          state.partChunks[partKey].push(e.data);
+        }
+      };
+
+      mr.onerror = (e) => {
+        console.error("MediaRecorder error:", e.error || e);
+      };
+
+      mr.start(1000); // push chunks every second
+    }
+
     function advanceTestState() {
       const set = state.selectedSet;
       const t = state.test;
-
       if (!set) return;
 
+      // STOP recording if we are leaving a speaking segment
+      if (t.phase === "speak") {
+        stopCurrentSegmentRecording();
+      }
+
       if (t.part === "p11") {
-        if (t.phase === "read") {
+        if (t.phase === "prestart") {
+          // after 3s warning → first reading
+          t.phase = "read";
+          t.secondsLeft = 5;
+        } else if (t.phase === "read") {
           t.phase = "speak";
           t.secondsLeft = 30;
         } else {
+          // after speaking
           if (t.questionIndex < set.part1_1.length - 1) {
             t.questionIndex += 1;
             t.phase = "read";
@@ -1279,40 +1366,11 @@
 
       render();
       startTimer();
-    }
 
-    async function finishTest() {
-      clearInterval(state.timerId);
-
-      if (state.mediaRecorder && state.isRecording) {
-        try {
-          state.mediaRecorder.stop();
-        } catch (e) {
-          console.error("Error stopping mediaRecorder:", e);
-        }
-        if (state.blobPromise) {
-          try {
-            await state.blobPromise;
-          } catch (e) {
-            console.error("Error waiting for blobPromise:", e);
-          }
-        }
+      // START recording if we entered a speaking segment
+      if (state.test.phase === "speak") {
+        startSegmentRecordingIfNeeded();
       }
-
-      if (state.audioContext) {
-        try {
-          await state.audioContext.close();
-        } catch {}
-      }
-      if (state.stream) {
-        state.stream.getTracks().forEach((t) => t.stop());
-        state.stream = null;
-      }
-
-      state.isRecording = false;
-      state.page = "done";
-      render();
-      sendToTelegram();
     }
 
     // --- TEST RENDER ---------------------------------------------
@@ -1353,7 +1411,11 @@
             </div>
             <div class="record-indicator">
               <span class="record-dot"></span>
-              <span>Recording</span>
+              <span>${
+                state.test.phase === "speak"
+                  ? "Recording (speaking time)"
+                  : "Mic on, recording off"
+              }</span>
             </div>
           </div>
 
@@ -1398,35 +1460,43 @@
       let questionText = "";
       let extraHtml = "";
       let showImage = false;
-      let progress = 0;
 
       const totalSteps =
+        1 + // prestart step
         set.part1_1.length +
         set.part1_2.questions.length +
         2 + // Part 2 prep + speak
-        2; // Part 3 prep + speak
+        2;  // Part 3 prep + speak
 
       let currentStepIndex = 0;
 
       if (t.part === "p11") {
-        currentStepIndex = t.questionIndex;
+        if (t.phase === "prestart") {
+          currentStepIndex = 0;
+        } else {
+          currentStepIndex = 1 + t.questionIndex;
+        }
       } else if (t.part === "p12") {
-        currentStepIndex = set.part1_1.length + t.questionIndex;
+        currentStepIndex = 1 + set.part1_1.length + t.questionIndex;
       } else if (t.part === "p2") {
-        currentStepIndex = set.part1_1.length + set.part1_2.questions.length;
+        currentStepIndex = 1 + set.part1_1.length + set.part1_2.questions.length;
         if (t.phase === "speak") currentStepIndex += 1;
       } else if (t.part === "p3") {
         currentStepIndex =
-          set.part1_1.length + set.part1_2.questions.length + 2;
+          1 + set.part1_1.length + set.part1_2.questions.length + 2;
         if (t.phase === "speak") currentStepIndex += 1;
       }
 
-      progress = Math.min(
+      const progress = Math.min(
         100,
         ((currentStepIndex + 1) / totalSteps) * 100
       );
 
-      if (t.part === "p11") {
+      if (t.part === "p11" && t.phase === "prestart") {
+        title = "Get ready";
+        subtitle = "The speaking test will start in a few seconds.";
+        questionText = "The test will start in 3 seconds. Please get ready.";
+      } else if (t.part === "p11") {
         title = "Part 1.1 – Short questions";
         subtitle = "5 seconds to read, 30 seconds to answer each question.";
         questionText = set.part1_1[t.questionIndex];
@@ -1499,15 +1569,21 @@
     }
 
     function phaseLabel(t) {
+      if (t.part === "p11" && t.phase === "prestart") {
+        return "Get ready";
+      }
       if (t.part === "p2" || t.part === "p3") {
-        if (t.phase === "prep") return "Preparation time";
-        return "Speaking time";
+        return t.phase === "prep" ? "Preparation time" : "Speaking time";
       }
       if (t.phase === "read") return "Reading the question";
-      return "Speaking";
+      if (t.phase === "speak") return "Speaking";
+      return "";
     }
 
     function timerLabel(t) {
+      if (t.part === "p11" && t.phase === "prestart") {
+        return "Test starts in";
+      }
       if (t.part === "p2" || t.part === "p3") {
         return t.phase === "prep" ? "Preparation time" : "Speaking time";
       }
@@ -1515,8 +1591,7 @@
     }
 
     function simplePartName(part) {
-      if (part === "p11") return "Part 1.1";
-      if (part === "p12") return "Part 1.2";
+      if (part === "p11" || part === "p12") return "Part 1";
       if (part === "p2") return "Part 2";
       if (part === "p3") return "Part 3";
       return "";
@@ -1530,6 +1605,10 @@
 
     // --- COMPLETION ----------------------------------------------
     function renderDone() {
+      const hasP1 = !!state.partBlobs.part1;
+      const hasP2 = !!state.partBlobs.part2;
+      const hasP3 = !!state.partBlobs.part3;
+
       app.innerHTML = `
         <header class="app-header">
           <div class="brand">
@@ -1546,11 +1625,26 @@
         <section class="completion-screen">
           <h2>✅ Great job!</h2>
           <p>
-            Your test is complete. The recording is being sent to your teacher on Telegram.
-            You can also download it for your own practice.
+            Your test is complete. Separate recordings for Part 1, Part 2 and Part 3
+            are being sent to your teacher on Telegram.
+            You can also download them for your own practice.
           </p>
-          <div class="btn-row" style="justify-content:center;">
-            <button class="btn btn-primary" onclick="downloadRecording()">Download my recording</button>
+          <div class="btn-row" style="justify-content:center; flex-wrap:wrap;">
+            ${
+              hasP1
+                ? `<button class="btn btn-primary" onclick="downloadRecording('part1')">Download Part 1</button>`
+                : ""
+            }
+            ${
+              hasP2
+                ? `<button class="btn btn-primary" onclick="downloadRecording('part2')">Download Part 2</button>`
+                : ""
+            }
+            ${
+              hasP3
+                ? `<button class="btn btn-primary" onclick="downloadRecording('part3')">Download Part 3</button>`
+                : ""
+            }
             <button class="btn btn-secondary" onclick="backToMenuAfterDone()">Back to main menu</button>
           </div>
         </section>
@@ -1562,17 +1656,19 @@
       render();
     }
 
-    function downloadRecording() {
-      if (!state.audioBlob) {
-        alert("No recording file found.");
+    function downloadRecording(partKey) {
+      const blob = state.partBlobs[partKey];
+      if (!blob) {
+        alert("No recording file found for this part.");
         return;
       }
       const setId = state.selectedSet ? state.selectedSet.id : 1;
-      const fileName = `${state.student.firstName}_${state.student.surname}_${state.student.group}_Set${setId}_${state.student.date.replace(
-        /\//g,
-        "-"
-      )}_${state.student.time.replace(/:/g, "-")}.webm`;
-      const url = URL.createObjectURL(state.audioBlob);
+      const safeDate = state.student.date.replace(/\//g, "-");
+      const safeTime = state.student.time.replace(/:/g, "-");
+      const label = logicalPartLabel(partKey).replace(/\s+/g, "");
+      const fileName = `${state.student.firstName}_${state.student.surname}_${state.student.group}_Set${setId}_${label}_${safeDate}_${safeTime}.webm`;
+
+      const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
       a.download = fileName;
@@ -1583,24 +1679,29 @@
     }
 
     // --- TELEGRAM API CALL ---------------------------------------
-    async function sendToTelegram() {
-      if (!state.audioBlob || !state.selectedSet) return;
+    async function blobToBase64(blob) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const result = reader.result || "";
+          const base64 =
+            typeof result === "string" && result.includes(",")
+              ? result.split(",")[1]
+              : result;
+          resolve(base64);
+        };
+        reader.onerror = () =>
+          reject(reader.error || new Error("Failed to read audio"));
+        reader.readAsDataURL(blob);
+      });
+    }
 
+    async function sendSinglePartToTelegram(partKey) {
+      const blob = state.partBlobs[partKey];
+      if (!blob || !state.selectedSet) return;
+      const partLabel = logicalPartLabel(partKey);
       try {
-        const base64Audio = await new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            const result = reader.result || "";
-            const base64 =
-              typeof result === "string" && result.includes(",")
-                ? result.split(",")[1]
-                : result;
-            resolve(base64);
-          };
-          reader.onerror = () =>
-            reject(reader.error || new Error("Failed to read audio"));
-          reader.readAsDataURL(state.audioBlob);
-        });
+        const base64Audio = await blobToBase64(blob);
 
         const res = await fetch("/api/sendRecording", {
           method: "POST",
@@ -1612,6 +1713,7 @@
             setName: state.selectedSet.name,
             date: state.student.date,
             time: state.student.time,
+            part: partLabel,
             audioBase64: base64Audio
           })
         });
@@ -1619,20 +1721,55 @@
         let data = {};
         try {
           data = await res.json();
-        } catch {}
+        } catch (_) {}
 
         if (!res.ok || data.ok === false) {
-          console.error("Telegram error:", data);
-          alert(
-            "Recording saved, but sending to Telegram failed. Please tell your teacher."
-          );
+          console.error("Telegram error for", partLabel, data);
         }
       } catch (err) {
-        console.error("sendToTelegram error:", err);
-        alert(
-          "Recording saved, but sending to Telegram failed. Please tell your teacher."
-        );
+        console.error("sendToTelegram error for part", partKey, err);
       }
+    }
+
+    async function sendToTelegram() {
+      // send Part 1, Part 2, Part 3 separately
+      await sendSinglePartToTelegram("part1");
+      await sendSinglePartToTelegram("part2");
+      await sendSinglePartToTelegram("part3");
+    }
+
+    async function finishTest() {
+      clearInterval(state.timerId);
+
+      // stop any current segment recording
+      stopCurrentSegmentRecording();
+
+      if (state.audioContext) {
+        try {
+          await state.audioContext.close();
+        } catch (_) {}
+        state.audioContext = null;
+        state.analyser = null;
+        state.isMicActive = false;
+      }
+
+      if (state.stream) {
+        state.stream.getTracks().forEach((t) => t.stop());
+        state.stream = null;
+      }
+
+      // Build final blobs for each part from chunks
+      ["part1", "part2", "part3"].forEach((key) => {
+        const chunks = state.partChunks[key];
+        if (chunks && chunks.length > 0) {
+          const type = chunks[0].type || "audio/webm";
+          state.partBlobs[key] = new Blob(chunks, { type });
+        }
+      });
+
+      state.page = "done";
+      render();
+      sendToTelegram();
     }
 
     // --- GLOBALS FOR INLINE HANDLERS -----------------------------
