@@ -839,9 +839,49 @@
           ]
         }
       },
-      ...Array.from({ length: 7 }).map((_, i) => ({
-        id: i + 4,
-        name: `Speaking Set ${i + 4}`,
+      {
+        id: 4,
+        name: "Speaking Set 4",
+        active: true,
+        description: "Beaches, seasons & traveling to new cities",
+        part1_1: [
+          "Do you like going to the beach?",
+          "What’s your favorite season?",
+          "Do you prefer spending time indoors or outdoors?"
+        ],
+        part1_2: {
+          image: "https://i.ibb.co/DnxRq9M/Screenshot-2025-12-04-at-12-35-08.png",
+          questions: [
+            "What do you see in these pictures?",
+            "Why do people like visiting the beach?",
+            "Which place would you prefer to visit, the beach or the mountains, and why?"
+          ]
+        },
+        part2: {
+          main: "Describe a time you visited a new city.",
+          prompts: [
+            "What did you do there?",
+            "What did you enjoy most about the trip?"
+          ]
+        },
+        part3: {
+          topic: "Traveling to new cities.",
+          for: [
+            "You can experience new cultures.",
+            "It’s a chance to meet new people.",
+            "Traveling can be educational."
+          ],
+          against: [
+            "It can be expensive.",
+            "Traveling may cause stress.",
+            "Some places may feel overcrowded."
+          ]
+        }
+      },
+      // Coming soon sets 5–10
+      ...Array.from({ length: 6 }).map((_, i) => ({
+        id: i + 5,
+        name: `Speaking Set ${i + 5}`,
         active: false,
         comingSoon: true,
         description: "Coming soon"
@@ -891,6 +931,11 @@
         part1: null,
         part2: null,
         part3: null
+      },
+      partSent: {
+        part1: false,
+        part2: false,
+        part3: false
       },
       isMicActive: false // for visualizer only
     };
@@ -1030,7 +1075,7 @@
               <div>
                 <div class="card-title">Choose your speaking set</div>
                 <div class="card-subtitle">
-                  Sets 1, 2 and 3 are active now. Other sets are coming soon.
+                  Sets 1, 2, 3 and 4 are active now. Other sets are coming soon.
                 </div>
               </div>
               <span class="badge">10 sets</span>
@@ -1228,6 +1273,7 @@
         // reset part recordings
         state.partChunks = { part1: [], part2: [], part3: [] };
         state.partBlobs = { part1: null, part2: null, part3: null };
+        state.partSent = { part1: false, part2: false, part3: false };
         state.mediaRecorder = null;
         state.recordingPartKey = null;
 
@@ -1310,6 +1356,23 @@
       state.recordingPartKey = null;
     }
 
+    // Build the final blob for a part and (optionally) send it now
+    function finalizePartRecording(partKey, sendNow = false) {
+      const chunks = state.partChunks[partKey];
+      if (!chunks || chunks.length === 0) return;
+
+      if (!state.partBlobs[partKey]) {
+        const type = chunks[0].type || "audio/webm";
+        state.partBlobs[partKey] = new Blob(chunks, { type });
+      }
+
+      if (sendNow && !state.partSent[partKey]) {
+        state.partSent[partKey] = true;
+        // fire and forget
+        sendSinglePartToTelegram(partKey);
+      }
+    }
+
     function startSegmentRecordingIfNeeded() {
       if (!state.stream) return;
       if (state.test.phase !== "speak") return;
@@ -1379,7 +1442,6 @@
 
         render();
         startTimer();
-        // if new phase is speak (currently not), we would start recording:
         if (state.test.phase === "speak") {
           startSegmentRecordingIfNeeded();
         }
@@ -1421,6 +1483,9 @@
             t.phase = "transition";
             t.transitionTo = "p2";
             t.secondsLeft = 4;
+
+            // Part 1 finished → send immediately
+            finalizePartRecording("part1", true);
           }
         }
       } else if (t.part === "p2") {
@@ -1432,12 +1497,17 @@
           t.phase = "transition";
           t.transitionTo = "p3";
           t.secondsLeft = 4;
+
+          // Part 2 finished → send immediately
+          finalizePartRecording("part2", true);
         }
       } else if (t.part === "p3") {
         if (t.phase === "prep") {
           t.phase = "speak";
           t.secondsLeft = 120;
         } else {
+          // Part 3 finished → send immediately, then finish test
+          finalizePartRecording("part3", true);
           finishTest();
           return;
         }
@@ -1847,10 +1917,14 @@
     }
 
     async function sendToTelegram() {
-      // send Part 1, Part 2, Part 3 separately
-      await sendSinglePartToTelegram("part1");
-      await sendSinglePartToTelegram("part2");
-      await sendSinglePartToTelegram("part3");
+      // send only parts that have a blob and were not sent yet
+      const parts = ["part1", "part2", "part3"];
+      for (const key of parts) {
+        if (state.partBlobs[key] && !state.partSent[key]) {
+          state.partSent[key] = true;
+          await sendSinglePartToTelegram(key);
+        }
+      }
     }
 
     async function finishTest() {
@@ -1873,17 +1947,14 @@
         state.stream = null;
       }
 
-      // Build final blobs for each part from chunks
+      // Build blobs for each part (if not already built)
       ["part1", "part2", "part3"].forEach((key) => {
-        const chunks = state.partChunks[key];
-        if (chunks && chunks.length > 0) {
-          const type = chunks[0].type || "audio/webm";
-          state.partBlobs[key] = new Blob(chunks, { type });
-        }
+        finalizePartRecording(key, false);
       });
 
       state.page = "done";
       render();
+      // Send any parts that haven't been sent yet
       sendToTelegram();
     }
 
