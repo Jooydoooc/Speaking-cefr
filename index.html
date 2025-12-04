@@ -878,14 +878,240 @@
           ]
         }
       },
-      // Coming soon sets 5–10
-      ...Array.from({ length: 6 }).map((_, i) => ({
-        id: i + 5,
-        name: `Speaking Set ${i + 5}`,
-        active: false,
-        comingSoon: true,
-        description: "Coming soon"
-      }))
+      {
+        id: 5,
+        name: "Speaking Set 5",
+        active: true,
+        description: "Art, school & learning skills",
+        part1_1: [
+          "Do you like painting or drawing?",
+          "What is your favorite subject at school?",
+          "Do you prefer studying alone or in a group?"
+        ],
+        part1_2: {
+          image: "https://i.ibb.co/fG0ydSXc/Screenshot-2025-12-04-at-13-27-26.png",
+          questions: [
+            "What do you see in these pictures?",
+            "Why do people enjoy art?",
+            "Which do you prefer, painting or studying, and why?"
+          ]
+        },
+        part2: {
+          main: "Describe a skill you want to learn.",
+          prompts: [
+            "How would you learn it?",
+            "Why is this skill useful?"
+          ]
+        },
+        part3: {
+          topic: "Learning new skills.",
+          for: [
+            "It can boost your confidence.",
+            "You can use the skill in your career.",
+            "It keeps your mind active."
+          ],
+          against: [
+            "Learning a new skill can be time-consuming.",
+            "Some skills require a lot of practice.",
+            "Not all skills are useful for everyone."
+          ]
+        }
+      },
+      {
+        id: 6,
+        name: "Speaking Set 6",
+        active: true,
+        description: "Sports, animals & reading",
+        part1_1: [
+          "Do you like watching sports?",
+          "What’s your favorite animal?",
+          "Do you enjoy reading books?"
+        ],
+        part1_2: {
+          image: "https://i.ibb.co/vGJYzW9/Screenshot-2025-12-04-at-13-29-21.png",
+          questions: [
+            "What do you see in these pictures?",
+            "Why do people like playing sports?",
+            "Which activity would you prefer, playing sports or watching sports, and why?"
+          ]
+        },
+        part2: {
+          main: "Describe a book you enjoyed reading.",
+          prompts: [
+            "Why did you enjoy it?",
+            "Would you recommend it to others?"
+          ]
+        },
+        part3: {
+          topic: "The benefits of reading.",
+          for: [
+            "Reading improves vocabulary.",
+            "Books can be a source of knowledge.",
+            "Reading helps reduce stress."
+          ],
+          against: [
+            "Some people find reading boring.",
+            "Books can be expensive.",
+            "It takes time away from other activities."
+          ]
+        }
+      },
+      {
+        id: 7,
+        name: "Speaking Set 7",
+        active: true,
+        description: "History, weather & helping others",
+        part1_1: [
+          "Do you like visiting historical places?",
+          "What’s your favorite kind of weather?",
+          "Do you prefer watching movies or reading books?"
+        ],
+        part1_2: {
+          image: "https://i.ibb.co/Kzq5PWbC/Screenshot-2025-12-04-at-13-31-44.png",
+          questions: [
+            "What do you see in these pictures?",
+            "Why do some people like visiting museums?",
+            "Which activity would you prefer, visiting a museum or reading a book, and why?"
+          ]
+        },
+        part2: {
+          main: "Describe a time you helped someone.",
+          prompts: [
+            "How did you help them?",
+            "Why do people like helping others?"
+          ]
+        },
+        part3: {
+          topic: "Helping others.",
+          for: [
+            "It creates a sense of community.",
+            "Helping others can make you feel good.",
+            "It improves relationships."
+          ],
+          against: [
+            "Some people may take advantage of your help.",
+            "Helping others can be time-consuming.",
+            "Not everyone appreciates help."
+          ]
+        }
+      },
+      {
+        id: 8,
+        name: "Speaking Set 8",
+        active: true,
+        description: "Languages, seasons & movies",
+        part1_1: [
+          "Do you like learning new languages?",
+          "What’s your favorite season of the year?",
+          "Do you prefer spending your free time alone or with friends?"
+        ],
+        part1_2: {
+          image: "https://i.ibb.co/tMwYM0TW/Screenshot-2025-12-04-at-13-34-14.png",
+          questions: [
+            "What do you see in these pictures?",
+            "Why do some people like learning new languages?",
+            "Which would you prefer, learning a language or spending time with friends, and why?"
+          ]
+        },
+        part2: {
+          main: "Describe a movie you enjoyed watching.",
+          prompts: [
+            "Why did you like it?",
+            "Would you recommend it to others?"
+          ]
+        },
+        part3: {
+          topic: "Watching movies.",
+          for: [
+            "Movies can entertain and relax us.",
+            "They can provide valuable lessons.",
+            "Movies can be a form of art."
+          ],
+          against: [
+            "Watching too many movies can waste time.",
+            "Some movies are not appropriate for all ages.",
+            "Movies can be too expensive to watch."
+          ]
+        }
+      },
+      {
+        id: 9,
+        name: "Speaking Set 9",
+        active: true,
+        description: "Video games, food & learning new things",
+        part1_1: [
+          "Do you like playing video games?",
+          "What is your favorite food to eat?",
+          "Do you enjoy cooking meals at home?"
+        ],
+        part1_2: {
+          image: "https://i.ibb.co/KpxSpBWX/Screenshot-2025-12-04-at-13-36-33.png",
+          questions: [
+            "What do you see in these pictures?",
+            "Why do some people enjoy playing video games?",
+            "Which would you prefer, playing video games or eating with family, and why?"
+          ]
+        },
+        part2: {
+          main: "Describe a time when you learned something new.",
+          prompts: [
+            "What did you learn?",
+            "How did it help you?"
+          ]
+        },
+        part3: {
+          topic: "Learning new things.",
+          for: [
+            "Learning helps you grow.",
+            "It opens up new opportunities.",
+            "It keeps your mind sharp."
+          ],
+          against: [
+            "Learning can be time-consuming.",
+            "Not all learning experiences are enjoyable.",
+            "Some things are hard to learn."
+          ]
+        }
+      },
+      {
+        id: 10,
+        name: "Speaking Set 10",
+        active: true,
+        description: "Gardening, music & attending events",
+        part1_1: [
+          "Do you like gardening?",
+          "What’s your favorite type of music?",
+          "Do you prefer eating at home or in a restaurant?"
+        ],
+        part1_2: {
+          image: "https://i.ibb.co/SwzBvxmb/Screenshot-2025-12-04-at-13-38-25.png",
+          questions: [
+            "What do you see in these pictures?",
+            "Why do some people like gardening?",
+            "Which place do you prefer to eat, at home or in a restaurant, and why?"
+          ]
+        },
+        part2: {
+          main: "Describe a memorable event you attended.",
+          prompts: [
+            "Who did you go with?",
+            "What made it special?"
+          ]
+        },
+        part3: {
+          topic: "Attending events.",
+          for: [
+            "It helps you socialize.",
+            "Events can be fun and exciting.",
+            "You can learn new things."
+          ],
+          against: [
+            "Events can be expensive.",
+            "Not all events are enjoyable.",
+            "Some events are overcrowded."
+          ]
+        }
+      }
     ];
 
     // --- STATE ---------------------------------------------------
@@ -1075,7 +1301,7 @@
               <div>
                 <div class="card-title">Choose your speaking set</div>
                 <div class="card-subtitle">
-                  Sets 1, 2, 3 and 4 are active now. Other sets are coming soon.
+                  All 10 sets are active now. Choose any set to start your speaking test.
                 </div>
               </div>
               <span class="badge">10 sets</span>
